@@ -1,151 +1,106 @@
 $(document).ready(function () {
-    labels = [
-        12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        11, 12,
-    ];
-    data_left1 = [
-        12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        11, 12,
-    ];
-    data_left2 = [
-        0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 5.5, 5, 4.5, 4, 3.5,
-        3, 2.5, 2, 1.5, 1, 0.5, 0,
-    ];
-    points = [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        6.04,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-    ];
-
-    function resize_left_image(height, width) {
-        $("#image_left").css("height", height);
-        $("#image_right").css("height", height);
-        $("#image_bottom").css("width", width);
-        $("#image_top").css("width", width);
+    // Função para obter parâmetros da URL
+    function getParameterByName(name, url = window.location.href) {
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
-    const plugin = {
-        id: "custom_gradient",
-        afterLayout: (chart) => {
-            var dataset = chart.data.datasets[0];
-            console.log(chart);
-            gradient = chart.ctx.createLinearGradient(
-                chart.chartArea.top * 2,
-                0,
-                chart.chartArea.bottom * 2,
-                0
-            );
-            gradient.addColorStop(0.895, "red");
-            gradient.addColorStop(0.5, "white");
-            gradient.addColorStop(0.25, "#0061F3");
-            dataset.backgroundColor = gradient;
-        },
-    };
+    // Obtendo os valores dos pontos X e Y da URL
+    var pointX = parseFloat(getParameterByName('pointx')) || 17; // Ponto X padrão: 17
+    var pointY = parseFloat(getParameterByName('pointy')) || 6.04; // Ponto Y padrão: 6.04
+
+    // Criando o array de pontos
+    var points = [{ x: pointX, y: pointY }];
 
     var my_point = new Image();
     my_point.src = "./round-point.png";
 
+    var img = new Image();
+    img.src = "./grafico.svg";
+
+    // Função para redimensionar o gráfico
+    function resizeChart() {
+        var container = document.getElementById("chart-container");
+        var width = container.offsetWidth;
+        var height = (width / 600) * 350; // Mantendo a proporção 600 por 350
+
+        ctx.canvas.width = width;
+        ctx.canvas.height = height;
+
+        myChart.resize(width, height);
+    }
+
+    // Redimensionar o gráfico quando a janela for redimensionada
+    window.addEventListener('resize', resizeChart);
+
     var ctx = document.getElementById("myChart").getContext("2d");
     var myChart = new Chart(ctx, {
-        type: "line",
-        plugins: [plugin],
+        type: "scatter",
         data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: "",
-                    backgroundColor: "blue",
-                    data: data_left1,
-                    fill: 1,
-                    pointRadius: 0,
-                    pointHitRadius: 0,
-                    pointHoverRadius: 0,
-                    order: 1,
-                    stack: "combined",
-                },
-                {
-                    label: "",
-                    backgroundColor: "blue",
-                    data: data_left2,
-                    fill: false,
-                    pointRadius: 0,
-                    pointHitRadius: 0,
-                    pointHoverRadius: 0,
-                    order: 1,
-                    stack: "combined",
-                },
-                {
-                    label: "",
-                    data: points,
-                    backgroundColor: "black",
-                    type: "scatter",
-                    order: 0,
-                    pointRadius: 10,
-                    pointStyle: my_point,
-                },
-            ],
+            datasets: [{
+                label: "",
+                data: points,
+                backgroundColor: "transparent",
+                borderColor: "black",
+                borderWidth: 1,
+                pointRadius: 10,
+                pointStyle: my_point,
+                pointBorderColor: "black",
+                pointBackgroundColor: "black",
+                pointBorderWidth: 1
+            }]
         },
         options: {
-            animation: {
-                onComplete: function (chart) {
-                    resize_left_image(
-                        chart.chart.chartArea.height,
-                        chart.chart.chartArea.width
-                    );
-                },
-            },
             plugins: {
-                legend: {
-                    display: false,
-                },
-                tooltip: {
-                    enabled: false,
-                },
+                legend: { display: false },
+                tooltip: { enabled: false }
             },
             scales: {
-                yAxes: {
-                    stacked: true,
+                y: {
+                    display: true,
+                    min: 0,
+                    max: 12,
                     ticks: {
-                        display: false, //this will remove only the label
-                    },
+                        display: false,
+                        stepSize: 2 // Definindo o espaçamento entre as linhas do grid em 2 unidades de altura
+                    }
                 },
-                xAxes: {
+                x: {
+                    display: true,
+                    min: 1,
+                    max: 25,
                     ticks: {
-                        display: false, //this will remove only the label
-                    },
-                },
+                        display: false,
+                        stepSize: 1 // Definindo o espaçamento entre as linhas do grid em 1 unidade de largura
+                    }
+                }
             },
-            interaction: {
-                intersect: false,
-            },
+            interaction: { intersect: false }
         },
+        // Adicionando a imagem ao gráfico
+        plugins: [{
+            beforeDraw: function(chart) {
+                var ctx = chart.ctx;
+                var xAxis = chart.scales['x'];
+                var yAxis = chart.scales['y'];
+                
+                ctx.drawImage(img, xAxis.left, yAxis.top, xAxis.width, yAxis.height);
+            }
+        }]
     });
+
+    // Redimensionar o gráfico ao carregar a página
+    resizeChart();
+
     window.addEventListener("beforeprint", () => {
         myChart.resize(600, 350);
     });
+
     window.addEventListener("afterprint", () => {
-        myChart.resize();
+        resizeChart();
     });
 });
