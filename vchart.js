@@ -61,7 +61,7 @@ $(document).ready(function () {
             },
             scales: {
                 y: {
-                    display: true,
+                    display: false,
                     min: 0,
                     max: 12,
                     ticks: {
@@ -70,7 +70,7 @@ $(document).ready(function () {
                     }
                 },
                 x: {
-                    display: true,
+                    display: false,
                     min: 1,
                     max: 25,
                     ticks: {
