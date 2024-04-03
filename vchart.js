@@ -20,7 +20,7 @@ $(document).ready(function () {
     my_point.src = "./round-point.png";
 
     var img = new Image();
-    img.src = "./grafico.svg";
+    img.src = "./grafico2.svg";
 
     // Função para redimensionar o gráfico
     function resizeChart() {
