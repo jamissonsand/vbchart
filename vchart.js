@@ -75,8 +75,8 @@ $(document).ready(function () {
                     },
                     x: {
                         display: false,
-                        min: 1,
-                        max: 25,
+                        min: -12,
+                        max: 12,
                         ticks: {
                             display: false,
                             stepSize: 1 // Definindo o espaçamento entre as linhas do grid em 1 unidade de largura
