@@ -66,8 +66,8 @@ $(document).ready(function () {
                 scales: {
                     y: {
                         display: false,
-                        min: 0,
-                        max: 12,
+                        min: -1,
+                        max: 13,
                         ticks: {
                             display: false,
                             stepSize: 2 // Definindo o espaçamento entre as linhas do grid em 2 unidades de altura
@@ -75,8 +75,8 @@ $(document).ready(function () {
                     },
                     x: {
                         display: false,
-                        min: -12,
-                        max: 12,
+                        min: -13.5,
+                        max: 13.5,
                         ticks: {
                             display: false,
                             stepSize: 1 // Definindo o espaçamento entre as linhas do grid em 1 unidade de largura
