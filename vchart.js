@@ -10,8 +10,8 @@ $(document).ready(function () {
     }
 
     // Obtendo os valores dos pontos X e Y da URL
-    var pointX = parseFloat(getParameterByName('pointx')) || 17; // Ponto X padrão: 17
-    var pointY = parseFloat(getParameterByName('pointy')) || 6.04; // Ponto Y padrão: 6.04
+    var pointX = parseFloat(getParameterByName('pointx')) || 0; // Ponto X padrão: 17
+    var pointY = parseFloat(getParameterByName('pointy')) || 0; // Ponto Y padrão: 6.04
 
     // Criando o array de pontos
     var points = [{ x: pointX, y: pointY }];
