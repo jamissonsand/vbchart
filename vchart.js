@@ -10,17 +10,18 @@ $(document).ready(function () {
     }
 
     // Obtendo os valores dos pontos X e Y da URL
-    var pointX = parseFloat(getParameterByName('pointx')) || 0; // Ponto X padrão: 17
-    var pointY = parseFloat(getParameterByName('pointy')) || 0; // Ponto Y padrão: 6.04
+    var pointX = parseFloat(getParameterByName('pointx')) || 0; // Ponto X padrão: 0
+    var pointY = parseFloat(getParameterByName('pointy')) || 0; // Ponto Y padrão: 0
+    var isSmall = getParameterByName('small') === 'true'; // Verifica se small é true
 
     // Criando o array de pontos
     var points = [{ x: pointX, y: pointY }];
 
     var my_point = new Image();
-    my_point.src = "./circle.svg";
+    my_point.src = isSmall ? "./circle2.svg" : "./circle.svg";
 
     var img = new Image();
-    img.src = "./grafico2.svg";
+    img.src = isSmall ? "./grafico.svg" : "./grafico2.svg";
 
     var legendImg = new Image();
     legendImg.src = "./legenda.svg";
@@ -51,7 +52,7 @@ $(document).ready(function () {
                     backgroundColor: "transparent",
                     borderColor: "black",
                     borderWidth: 1,
-                    pointRadius: 10,
+                    pointRadius: isSmall ? 10 : 10,  // Alterar o ponto de acordo com o parâmetro small
                     pointStyle: my_point,
                     pointBorderColor: "black",
                     pointBackgroundColor: "black",
@@ -94,12 +95,15 @@ $(document).ready(function () {
                     
                     // Desenhar imagem do gráfico 10px menor em cada lado
                     var graphWidth = xAxis.width * 0.9; // 80% da largura do contêiner
-var graphHeight = yAxis.height * 0.87; // 80% da altura do contêiner
-var graphX = xAxis.left + (xAxis.width * 0.05); // 10% de margem esquerda
-var graphY = yAxis.top + (yAxis.height * 0.07); // 10% de margem superior
-ctx.drawImage(img, graphX, graphY, graphWidth, graphHeight);
-// Desenhar legenda por baixo
-ctx.drawImage(legendImg, xAxis.left, yAxis.top, xAxis.width, yAxis.height);
+                    var graphHeight = yAxis.height * 0.87; // 80% da altura do contêiner
+                    var graphX = xAxis.left + (xAxis.width * 0.05); // 10% de margem esquerda
+                    var graphY = yAxis.top + (yAxis.height * 0.07); // 10% de margem superior
+                    ctx.drawImage(img, graphX, graphY, graphWidth, graphHeight);
+                    
+                    // Desenhar legenda por baixo, se não for pequeno
+                    if (!isSmall) {
+                        ctx.drawImage(legendImg, xAxis.left, yAxis.top, xAxis.width, yAxis.height);
+                    }
                 }
             }]
         });
